@@ -2,7 +2,7 @@ import openai
 import json
 
 # Your OpenAI API key
-openai.api_key = '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'
+openai.api_key = 'my_API_Code'
 
 def extract_information(text):
     prompt = "Extract relevant information from the given text:\n"

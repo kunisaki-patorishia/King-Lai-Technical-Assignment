@@ -26,7 +26,7 @@ with open(file_path, 'r', encoding='utf-8') as file:
 result = extract_information(html_content)
 
 # Save the result in JSON format
-output_json_path = 'output_result.json'  # Replace with your desired output path
+output_json_path = 'output_result with simple regrex.json'  # Replace with your desired output path
 with open(output_json_path, 'w', encoding='utf-8') as json_file:
     json.dump(result, json_file, indent=2)
 
