@@ -1,30 +1,33 @@
-import openai
+import re
 import json
 
-# Your OpenAI API key
-openai.api_key = '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'
+def extract_information(html_content):
+    # Example: Extracting company names using a simple regex
+    company_names = re.findall(r'\b[A-Z][a-z]*\b', html_content)
 
-def extract_information(text):
-    prompt = "Extract relevant information from the given text:\n"
-    example = f"{prompt}{text}"
+    # Example: Extracting the main topic using a simple regex
+    main_topic_match = re.search(r'<title>(.*?)</title>', html_content)
+    main_topic = main_topic_match.group(1) if main_topic_match else None
 
-    response = openai.Completion.create(
-        engine="text-davinci-002-ft",  # Replace with the correct and supported model
-        prompt=example,
-        temperature=0.7,
-        max_tokens=150
-    )
+    # Build the result in the desired JSON format
+    result = {
+        "related_companies": [{"company_name": company, "company_domain": company.lower() + ".com"} for company in company_names],
+        "topic": main_topic
+    }
 
-    extracted_info = response.choices[0].text.strip()
-
-    return json.loads(extracted_info)
+    return result
 
 # Load HTML content from the saved text file
-with open('KingLaiText.txt', 'r', encoding='utf-8') as file:
+file_path = 'KingLaiText.txt'  # Replace with the actual path to your text file
+with open(file_path, 'r', encoding='utf-8') as file:
     html_content = file.read()
 
 # Extract information using the function
 result = extract_information(html_content)
 
-# Print or save the result
-print(json.dumps(result, indent=2))
+# Save the result in JSON format
+output_json_path = 'output_result.json'  # Replace with your desired output path
+with open(output_json_path, 'w', encoding='utf-8') as json_file:
+    json.dump(result, json_file, indent=2)
+
+print(f"Result saved to {output_json_path}")
